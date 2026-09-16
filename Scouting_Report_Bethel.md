@@ -1,92 +1,98 @@
 # SCOUTING REPORT — Bethel
 
-*Prepared for coaching staff. Data = film-charted tendencies from `Scouting_Report.xlsx`. Offense = what our DEFENSE faces; Defense = what our OFFENSE faces.*
+*Film-charted tendencies from `Scouting_Report.xlsx`. "Offense" = Bethel with the ball; "Defense" = Bethel defending. Percentages are share of charted plays unless noted.*
 
-## TOP TAKEAWAYS (read this first)
+## KEY OBSERVATIONS
 
-**When we're on DEFENSE (their offense):**
-1. **Their formations tell you the play.** Dodge & Tray = run (~90%). Tag, Triple, Trips = pass (~100%). Coach the pre-snap key.
-2. **Their run game is weak — 3.1 yards/carry.** Stuff early-down runs, make them throw to move the chains.
-3. **On 3rd/4th-and-long they pass 83–88%.** Get them into long-yardage and pin your ears back.
-4. **The pass is their real weapon** — 80% completions, 13% of passes go explosive (16+). Tackle in space, no coverage busts.
+**Bethel on offense:**
+1. **Formation is a strong indicator of play type.** Dodge & Tray are almost all run (~90%); Tag, Triple, and Trips are almost all pass (~100%).
+2. **The run has been inefficient — 3.1 yards per carry**, despite a run-heavy early-down profile.
+3. **On 3rd and 4th & long they throw 83–88% of the time.**
+4. **The passing game is their more productive phase** — 80% completions, and 13% of pass attempts have gone for explosive gains (16+).
 
-**When we're on OFFENSE (their defense):**
-1. **They are a zone team** — Cover 4 (35%) and Cover 3 looks (3 Roll 32%, 3 Sky 17%). Almost no man. Rep our zone-beaters.
-2. **Their defense is beatable — it allows a 58% success rate.** Be aggressive.
-3. **Soft coverages: 3 Sky (allows 86% success) and 3 Roll (72%).** When you see 3-deep roll/sky, let it rip.
-4. **Take our shots vs Cover 4** — 25% of plays against it go explosive (15+).
+**Bethel on defense:**
+1. **They are a zone-based defense** — Cover 4 (35%), 3 Roll (32%), and 3 Sky (17%) make up most snaps; man coverage is rare (~8%).
+2. **They have allowed a 58% offensive success rate overall.**
+3. **Their softest coverages by results: 3 Sky (86% success allowed) and 3 Roll (72%).**
+4. **Explosive plays (15+) against them have come most often vs Cover 4 (25% of those snaps).**
 
 ---
 
-## PART 1 — BETHEL OFFENSE (our defense's plan)
+## PART 1 — BETHEL OFFENSE
 
 ### Overall
-- **Balanced by count:** 50% run / 49% pass — but **inefficient: only 40% of plays "succeed."**
-- **Run: 3.1 YPC (weak). Pass: 6.4 YPA, 80% completions (efficient).** Scramble rate ~2% (QB stays in pocket).
-- **Explosives:** Run 7% (7 of 89) · Pass 13% (12 of 86). The air is where they hurt you.
+- **Play mix:** 50% run / 49% pass. **Overall success rate: 40%.**
+- **Efficiency:** 3.1 yards/carry · 6.4 yards/attempt · 80% completions · ~2% scramble rate.
+- **Explosive rate:** Run 7% (7 of 89) · Pass 13% (12 of 86).
 
-### Down tendencies
-| Down | Tendency |
+### Tendency by down
+| Down | Lean |
 |---|---|
-| 1st | **Run 66%** |
+| 1st | Run 66% |
 | 2nd | ~50/50 |
-| 3rd | **Pass 68%** |
-| 4th | **Pass 62%** |
+| 3rd | Pass 68% |
+| 4th | Pass 62% |
 
-### Down & distance (strong keys)
-- **1st-and-medium (4–7): 100% RUN.** 1st-and-long: 66% run.
-- **2nd-and-long (8+): 71% PASS.**
-- **3rd-and-medium: 75% PASS · 3rd-and-long: 88% PASS.**
-- **4th-and-short: 100% RUN · 4th-and-long: 83% PASS.**
+### Tendency by down & distance
+- **1st-and-medium (4–7): 100% run.** 1st-and-long: 66% run.
+- **2nd-and-long (8+): 71% pass.**
+- **3rd-and-medium: 75% pass · 3rd-and-long: 88% pass.**
+- **4th-and-short: 100% run · 4th-and-long: 83% pass.**
 
-### Formation = play (biggest edge)
-| Formation | Call | Formation | Call |
+### Tendency by formation
+| Formation | Lean | Formation | Lean |
 |---|---|---|---|
-| Dodge Lt/Rt | **RUN (94/86%)** | Tag Lt/Rt | **PASS (85/100%)** |
-| Tray Lt/Rt | **RUN (87/100%)** | Triple Lt/Rt | **PASS (100%)** |
-| Twins | Pass 60% | Trips | **PASS (100%)** |
+| Dodge Lt/Rt | Run 94/86% | Tag Lt/Rt | Pass 85/100% |
+| Tray Lt/Rt | Run 87/100% | Triple Lt/Rt | Pass 100% |
+| Twins | Pass 60% | Trips | Pass 100% |
 | Dak | Pass 66% | | |
 
-### Where they're dangerous vs. dead
-- **Most efficient (be alert):** Tag Rt (75% success), Tray Rt (73%).
-- **Dead looks (attack):** Dak (0%), Trips (23%), Triple Lt (26%).
+### Efficiency by formation
+- **Most productive:** Tag Rt (75% success), Tray Rt (73%).
+- **Least productive:** Dak (0%), Trips (23%), Triple Lt (26%).
 
-**Defensive game plan:** Win 1st down by stopping the run (3.1 YPC, run-heavy). That pushes them to 2nd/3rd-and-long where they're 71–88% pass and only 40% efficient overall. Play disciplined zone, tackle in space, deny the explosive pass. Use formation tells for a run/pass jump every snap.
+*What the numbers show: Bethel is run-heavy on early downs but averages only 3.1 YPC, and their overall success rate is 40%. When they fall behind schedule (2nd/3rd/4th & long) they become heavily pass-oriented (71–88%). Their explosive production comes through the air (13% of passes), and their formation usage is a reliable pre-snap run/pass indicator.*
 
 ---
 
-## PART 2 — BETHEL DEFENSE (our offense's plan)
+## PART 2 — BETHEL DEFENSE
 
-### What they line up in
+### Alignment
 - **Fronts:** Over 54% · Stack 29% · Under 12% · Bear 3%.
-- **Coverage (heavily zone):** Cover 4 (35%) · 3 Roll (32%) · 3 Sky (17%). Man looks rare (~8% combined).
+- **Coverage:** Cover 4 35% · 3 Roll 32% · 3 Sky 17% · man coverages ~8% combined.
 
-### They are beatable
-- **Overall they ALLOW a 58% offensive success rate.**
-- **Success allowed by coverage — attack these:**
+### Results allowed
+- **Overall offensive success rate allowed: 58%.**
+- **Success allowed by coverage:**
 
   | Coverage | Success allowed |
   |---|---|
-  | **3 Sky** | **86%** |
-  | **3 Roll** | **72%** |
+  | 3 Sky | 86% |
+  | 3 Roll | 72% |
   | Cover 4 | 58% |
 
-  (0 Man / 2 Man stop it but they almost never call them.)
-- **Success allowed by front:** Under **75%** (worst, only 12% of snaps) · Bear 66% · Over 67% · Stack 64%.
+  (0 Man and 2 Man have held up but are rarely called.)
+- **Success allowed by front:**
 
-### Where the explosives come from
-- **Cover 4 gives up explosive (15+) on 25% of plays** — our shot-play coverage.
-- **Stack front:** 21% "long" + 10% explosive allowed. Over front: 13% explosive.
-- Bear front stuffs runs (66% for loss) but they rarely use it (3%).
+  | Front | Success allowed |
+  |---|---|
+  | Under | 75% |
+  | Over | 67% |
+  | Bear | 66% |
+  | Stack | 64% |
 
-### Formation manipulation (make them show a look we like)
-- **Dodge** → 80% Over front, **100% Cover 4** → dial a Cover-4 shot.
-- **Triple** → 58% Cover 4.
-- **Beast** → 50% 3 Sky (their softest coverage).
+### Yards allowed / explosives
+- **Cover 4: explosive (15+) on 25% of snaps against it.**
+- **Stack front:** 21% "long" (8–14) + 10% explosive allowed. Over front: 13% explosive.
+- **Bear front:** stuffs runs (66% for a loss) but is used on only 3% of snaps.
+
+### Front & coverage by offensive formation faced
+- **Dodge** → 80% Over front, 100% Cover 4.
+- **Triple** → 58% Cover 4. **Beast** → 50% 3 Sky.
 - **Doubles** → mostly 3 Roll / 3 Sky.
 
-### Their front tendencies by down
+### Front tendency by down
 - **2nd-and-short: 100% Stack.**
-- **3rd-and-long: Stack 52%** (expect it, protect for it).
+- **3rd-and-long: Stack 52%.**
 
-**Offensive game plan:** Zone-first defense that gives up a lot. Rep zone-beaters (flood, hi-lo, stick) and pick on **3 Sky / 3 Roll**. Use **Dodge/Triple** to bait **Cover 4** and take explosive shots there. Stay on schedule to avoid 3rd-and-long into their Stack front. Under is their weakest front — if we can force it, run at it.
+*What the numbers show: Bethel is a zone-first defense (Cover 4 and Cover 3 variants) that has allowed a 58% success rate. Results have been weakest in 3 Sky (86%) and 3 Roll (72%), and their explosive plays allowed cluster in Cover 4 (25%) and the Stack front. Their front and coverage choices correlate with down/distance and with offensive formation.*
