@@ -6,12 +6,50 @@ from pathlib import Path
 def to_pct(data):
     return (data * 100).fillna(0).astype(int).astype(str) + '%'
 
-def write_to_excel(writer, sheet_name, table, title, start_row):
+def excel_numeric_table(table):
+    """Convert percentage text to numeric ratios before writing to Excel."""
+    table = table.copy()
+    for column in table.columns:
+        table[column] = table[column].map(
+            lambda value: float(value.rstrip('%')) / 100
+            if isinstance(value, str) and value.endswith('%') else value
+        )
+    return table
+
+def write_to_excel(writer, sheet_name, table, title, start_row, percentage_rows=None):
     """Helper function to write a title and a table, returning the next open row."""
-    # Write the title
-    pd.DataFrame([title]).to_excel(writer, sheet_name=sheet_name, startrow=start_row, startcol=0, header=False, index=False)
-    # Write the actual table
-    table.to_excel(writer, sheet_name=sheet_name, startrow=start_row + 1)
+    title = title.strip('- ')
+    # Write the data as a real Excel table with explicit index columns.
+    numeric_table = excel_numeric_table(table).reset_index()
+    numeric_table.to_excel(writer, sheet_name=sheet_name, startrow=start_row + 2, header=False, index=False)
+
+    percentage_format = writer.book.add_format({'num_format': '0%'})
+    title_format = writer.book.add_format({'bold': True, 'bg_color': '#1F4E78', 'font_color': '#FFFFFF', 'border': 1})
+    worksheet = writer.sheets[sheet_name]
+    worksheet.merge_range(start_row, 0, start_row, len(numeric_table.columns) - 1, title, title_format)
+    percentage_rows = set(percentage_rows or [])
+    index_width = table.index.nlevels
+    worksheet.add_table(
+        start_row + 1,
+        0,
+        start_row + len(numeric_table) + 1,
+        len(numeric_table.columns) - 1,
+        {
+            'name': f'{sheet_name}_{start_row}'.replace('-', '_'),
+            'style': 'Table Style Medium 2',
+            'columns': [{'header': str(column)} for column in numeric_table.columns],
+        },
+    )
+    for row_position, (row_index, row) in enumerate(table.iterrows()):
+        for column_index, column in enumerate(table.columns):
+            value = row[column]
+            is_percentage = (
+                (isinstance(value, str) and value.endswith('%'))
+                or column in {'Percentage', 'Success Rate'}
+                or row_position in percentage_rows
+            )
+            if is_percentage and pd.notna(numeric_table.iloc[row_position, index_width + column_index]):
+                worksheet.write(start_row + 2 + row_position, index_width + column_index, numeric_table.iloc[row_position, index_width + column_index], percentage_format)
     # Return the row number for the next table (adds padding)
     return start_row + len(table) + 4
 
@@ -168,7 +206,9 @@ def main() -> None:
     print("\n")
 
     print("--- 3. Down & Distance vs. Coverage ---")
-    print(to_pct(pd.crosstab([defense_df['Dn'], defense_df['Dist Bucket']], defense_df['Coverage'], normalize='index')))
+    down_distance_coverage = pd.crosstab([defense_df['Dn'], defense_df['Dist Bucket']], defense_df['Coverage'], normalize='index')
+    down_distance_coverage = down_distance_coverage.loc[:, (down_distance_coverage >= 0.15).sum(axis=0) >= 3]
+    print(to_pct(down_distance_coverage))
     print("\n")
 
     print("--- 4. Down & Distance vs. Def Front ---")
@@ -179,10 +219,8 @@ def main() -> None:
     print(to_pct(pd.crosstab(freq_defense_df['Off form'], freq_defense_df['Def Front'], normalize='index')))
     print("\n")
 
-    print("--- 6. Off Formation vs. Coverage (Min 7 Plays, Max Coverage > 20%) ---")
-    formation_coverage = pd.crosstab(freq_defense_df['Off form'], freq_defense_df['Coverage'], normalize='index')
-    formation_coverage = formation_coverage[formation_coverage.max(axis=1) > 0.20]
-    print(to_pct(formation_coverage))
+    print("--- 6. Off Formation vs. Coverage (Min 7 Plays) ---")
+    print(to_pct(pd.crosstab(freq_defense_df['Off form'], freq_defense_df['Coverage'], normalize='index')))
     print("\n")
 
     # --- DEFENSE EFFICIENCY ---
@@ -228,9 +266,9 @@ def main() -> None:
         # 6. Key Efficiency (Converted to DataFrame for Excel)
         eff_data = {
             'Metric': ['Yards Per Carry (YPC)', 'Yards Per Attempt (YPA)', 'Completion %', 'Scramble Rate %'],
-            'Value': [f"{ypc:.1f}", f"{ypa:.1f}", f"{int(comp_pct)}%", f"{int(scramble_rate)}%"]
+            'Value': [round(ypc, 1), round(ypa, 1), comp_pct / 100, scramble_rate / 100]
         }
-        o_row = write_to_excel(writer, 'Offense_Stats', pd.DataFrame(eff_data).set_index('Metric'), '--- 6. Key Efficiency Metrics ---', o_row)
+        o_row = write_to_excel(writer, 'Offense_Stats', pd.DataFrame(eff_data).set_index('Metric'), '--- 6. Key Efficiency Metrics ---', o_row, percentage_rows=[2, 3])
         
         # 7-8. Success Rates
         o_row = write_to_excel(writer, 'Offense_Stats', to_pct(offense_df['Eff'].value_counts(normalize=True, dropna=True).to_frame('Percentage')), '--- 7. Overall Success Rate ---', o_row)
@@ -241,7 +279,7 @@ def main() -> None:
         # 9. Explosive Plays (Converted to DataFrame)
         exp_data = {
             'Metric': ['Explosive Run Rate (12+)', 'Explosive Pass Rate (16+)'],
-            'Percentage': [f"{int(exp_run_pct)}%", f"{int(exp_pass_pct)}%"],
+            'Percentage': [exp_run_pct / 100, exp_pass_pct / 100],
             'Details': [f"{len(explosive_runs)} of {total_runs} runs", f"{len(explosive_passes)} of {total_passes} passes"]
         }
         o_row = write_to_excel(writer, 'Offense_Stats', pd.DataFrame(exp_data).set_index('Metric'), '--- 9. Explosive Play Rates ---', o_row)
@@ -254,10 +292,10 @@ def main() -> None:
         # 1-6. Base & Situational Tendencies
         d_row = write_to_excel(writer, 'Defense_Stats', to_pct(defense_df['Def Front'].value_counts(normalize=True).to_frame('Percentage')), '--- 1. Defensive Front Distribution ---', d_row)
         d_row = write_to_excel(writer, 'Defense_Stats', to_pct(defense_df['Coverage'].value_counts(normalize=True).to_frame('Percentage')), '--- 2. Coverage Distribution ---', d_row)
-        d_row = write_to_excel(writer, 'Defense_Stats', to_pct(pd.crosstab([defense_df['Dn'], defense_df['Dist Bucket']], defense_df['Coverage'], normalize='index')), '--- 3. Down & Distance vs. Coverage ---', d_row)
+        d_row = write_to_excel(writer, 'Defense_Stats', to_pct(down_distance_coverage), '--- 3. Down & Distance vs. Coverage (At Least 3 Rows >= 15%) ---', d_row)
         d_row = write_to_excel(writer, 'Defense_Stats', to_pct(pd.crosstab([defense_df['Dn'], defense_df['Dist Bucket']], defense_df['Def Front'], normalize='index')), '--- 4. Down & Distance vs. Def Front ---', d_row)
         d_row = write_to_excel(writer, 'Defense_Stats', to_pct(pd.crosstab(freq_defense_df['Off form'], freq_defense_df['Def Front'], normalize='index')), '--- 5. Off Formation vs. Def Front (Min 7 Plays) ---', d_row)
-        d_row = write_to_excel(writer, 'Defense_Stats', to_pct(formation_coverage), '--- 6. Off Formation vs. Coverage (Min 7 Plays, Max Coverage > 20%) ---', d_row)
+        d_row = write_to_excel(writer, 'Defense_Stats', to_pct(pd.crosstab(freq_defense_df['Off form'], freq_defense_df['Coverage'], normalize='index')), '--- 6. Off Formation vs. Coverage (Min 7 Plays) ---', d_row)
         
         # 7-11. Efficiency & Yards Allowed
         d_row = write_to_excel(writer, 'Defense_Stats', to_pct(defense_df['Eff'].value_counts(normalize=True, dropna=True).to_frame('Percentage')), '--- 7. Overall Defensive Efficiency (Allowed) ---', d_row)
