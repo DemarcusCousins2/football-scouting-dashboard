@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor temp files
+.DS_Store
+~$*
+
+# Generated reports
+Scouting_Report*.xlsx
+
+# Scouting data — kept private so it isn't published to a public repo.
+# The deployed app uses the Upload button instead of reading the folder.
+# Comment these out if you want a demo dataset baked into the app.
+*.csv
+*.pdf
+*.xlsx
