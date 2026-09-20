@@ -9,8 +9,9 @@ venv/
 .DS_Store
 ~$*
 
-# Generated reports
+# Generated / scouting reports (keep private)
 Scouting_Report*.xlsx
+Scouting_Report_Bethel.*
 
 # Scouting data — kept private so it isn't published to a public repo.
 # The deployed app uses the Upload button instead of reading the folder.
