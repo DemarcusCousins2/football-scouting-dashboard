@@ -19,3 +19,6 @@ Scouting_Report_Bethel.*
 *.csv
 *.pdf
 *.xlsx
+
+# Streamlit secrets (API keys)
+.streamlit/secrets.toml

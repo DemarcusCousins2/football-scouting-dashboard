@@ -14,6 +14,17 @@ python3 -m venv .venv
 Open the browser tab it launches and upload a Hudl scouting CSV. When running locally you can
 also just drop a CSV in this folder and the app auto-loads the newest one.
 
+## AI summary
+
+The top of the page shows a Claude-generated summary of the most important points for stopping
+their offense and attacking their defense. It's built from the filtered tables, and each filter
+combination is cached so it's only generated once. To enable it, provide an Anthropic API key:
+
+- **Local:** `export ANTHROPIC_API_KEY=...` before running `streamlit run main.py`
+- **Streamlit Cloud:** add `ANTHROPIC_API_KEY = "..."` under **Settings → Secrets**
+
+Without a key, the app works as before and shows a notice in place of the summary.
+
 ## Deploy to Streamlit Community Cloud (to share a link with your coach)
 
 1. Push this folder to a **GitHub repo** (public, or **private** if the scouting data is confidential).

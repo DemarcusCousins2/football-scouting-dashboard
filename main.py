@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import io
+import os
 from pathlib import Path
 
+import anthropic
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -30,6 +32,18 @@ EXPLOSIVE_PASS_YDS = 16
 MIN_COVERAGE_SHARE = 0.20
 # A formation is a pre-snap "tell" if it leans run or pass at least this strongly.
 TELL_THRESHOLD = 0.70
+
+AI_SUMMARY_MODEL = "claude-opus-5"
+AI_SUMMARY_SYSTEM = (
+    "You are a football defensive and offensive coordinator's scouting analyst. You are given "
+    "stat tables built from Hudl film of an OPPONENT. 'Offense' is the opponent's offense (what "
+    "our defense faces); 'Defense' is the opponent's defense (what our offense faces). Write a "
+    "short game-plan summary in Markdown with exactly two sections: '#### 🛡️ Stopping their "
+    "offense' and '#### 🏈 Attacking their defense'. Give 3-5 bullets per section, most "
+    "important first. Each bullet must be a concrete, actionable key backed by a number from "
+    "the tables (e.g. formation tells, down-and-distance tendencies, coverages that give up "
+    "yards). Flag small samples instead of overstating them. No intro or closing text."
+)
 
 
 def to_pct(data: pd.DataFrame | pd.Series) -> pd.DataFrame | pd.Series:
@@ -672,6 +686,65 @@ def render_analysis(analysis: dict, min_plays: int, show_metrics: bool = False) 
             )
 
 
+def build_summary_digest(offense: dict, defense: dict, play_count: int, min_plays: int) -> str:
+    """Flatten the filtered metrics and tables into plain text for the AI summary prompt."""
+    lines = [f"Plays in current filter: {play_count} (tables require at least {min_plays} plays)."]
+    for side, analysis in [("OFFENSE", offense), ("DEFENSE", defense)]:
+        lines.append(f"\n=== {side} ===")
+        for label, value in analysis["metrics"].items():
+            lines.append(f"{label}: {value if isinstance(value, str) else f'{value:.1f}'}")
+        for title, table in analysis["tables"]:
+            if not table.empty:
+                lines.append(f"\n## {title}\n{table.to_csv()}")
+    return "\n".join(lines)
+
+
+def anthropic_api_key() -> str | None:
+    """API key from Streamlit secrets (hosted app) or the environment (local runs)."""
+    try:
+        key = st.secrets.get("ANTHROPIC_API_KEY")
+    except FileNotFoundError:
+        key = None
+    return key or os.environ.get("ANTHROPIC_API_KEY")
+
+
+@st.cache_data(show_spinner=False)
+def generate_ai_summary(digest: str, api_key: str) -> str:
+    """Ask Claude for the key offense/defense points; cached so each filter combo is billed once."""
+    client = anthropic.Anthropic(api_key=api_key)
+    response = client.beta.messages.create(
+        model=AI_SUMMARY_MODEL,
+        max_tokens=16000,
+        system=AI_SUMMARY_SYSTEM,
+        output_config={"effort": "medium"},
+        betas=["server-side-fallback-2026-07-01"],
+        fallbacks="default",
+        messages=[{"role": "user", "content": digest}],
+    )
+    if response.stop_reason == "refusal":
+        raise RuntimeError("The model declined to summarize this data.")
+    return "".join(block.text for block in response.content if block.type == "text").strip()
+
+
+def render_ai_summary(offense: dict, defense: dict, play_count: int, min_plays: int) -> None:
+    """Render the AI game-plan summary above the offense/defense tabs."""
+    st.subheader("🤖 AI Scouting Summary")
+    api_key = anthropic_api_key()
+    if not api_key:
+        st.info("Set ANTHROPIC_API_KEY (environment variable or Streamlit secret) to enable the AI summary.")
+        return
+    digest = build_summary_digest(offense, defense, play_count, min_plays)
+    try:
+        with st.spinner("Summarizing the most important tendencies..."):
+            summary = generate_ai_summary(digest, api_key)
+    except (anthropic.APIError, RuntimeError) as error:
+        st.warning(f"AI summary unavailable: {error}")
+        return
+    with st.container(border=True):
+        st.markdown(summary)
+    st.caption("AI-generated from the filtered tables below. Double-check key calls against the film.")
+
+
 def latest_csv_path() -> Path | None:
     """Most recently modified CSV in the app folder, or None if there aren't any."""
     base_dir = Path(__file__).resolve().parent
@@ -714,6 +787,7 @@ def main() -> None:
     if auto_loaded_name:
         st.caption(f"Auto-loaded newest CSV in the app folder: {auto_loaded_name}")
     st.caption(f"Showing {len(filtered_df):,} of {len(df):,} plays")
+    render_ai_summary(offense, defense, len(filtered_df), min_plays)
     offense_tab, defense_tab = st.tabs(["Offense", "Defense"])
     with offense_tab:
         render_analysis(offense, min_plays, show_metrics=True)
